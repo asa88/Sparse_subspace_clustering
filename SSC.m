@@ -52,6 +52,7 @@ parfor i=1:size(X,2),
 	temp=zeros(N,1);
 	c = SparseCoefRecovery(Xp,Cst,OptM,lambda,i);
  	if i == 1   
+
        temp(2:N,1) = c(1:N-1);
 	   CMat(:,i)=temp;
 	elseif ( (i > 1) && (i < N) )

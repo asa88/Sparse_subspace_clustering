@@ -13,7 +13,7 @@
 %--------------------------------------------------------------------------
 
 
-function c = SparseCoefRecovery(Xp,cst,Opt,lambda,i)
+function c = SparseCoefRecovery(Xp,cst,Opt,lambda,i,indx)
 
 if (nargin < 2)
     cst = 0;
@@ -31,6 +31,9 @@ N = size(Xp,2);
 %for i = 1:N
     
     y = Xp(:,i);
+
+	Y=Xp(:,indx);
+	%{
     if i == 1
         Y = Xp(:,i+1:end);
     elseif ( (i > 1) && (i < N) )
@@ -38,17 +41,16 @@ N = size(Xp,2);
     else
         Y = Xp(:,1:N-1);
     end
-    
+    %}
     % L1 optimization using CVX
-    
+   
     if ( strcmp(Opt , 'Lasso') )
         cvx_begin;
         cvx_precision high
-        variable c(N-1,1);
+        variable c(100-1,1);
         minimize( norm(c,1) + lambda * norm(Y * c  - y) );
         cvx_end;
     end
-    
     % place 0's in the diagonals of the coefficient matrix
 	%{	
     if i == 1   
